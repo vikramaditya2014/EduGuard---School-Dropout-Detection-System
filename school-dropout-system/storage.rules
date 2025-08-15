@@ -1,0 +1,65 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // User profile pictures
+    match /users/{userId}/avatar/{fileName} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && isAdmin();
+    }
+    
+    // Student photos
+    match /students/{studentId}/photos/{fileName} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && (isAdmin() || isTeacher() || isCounselor());
+    }
+    
+    // Document uploads
+    match /documents/{userId}/{fileName} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && isAdmin();
+    }
+    
+    // Report exports - only authenticated users can read
+    match /reports/{fileName} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && isAdmin();
+    }
+    
+    // Data imports - only admins can upload
+    match /imports/{fileName} {
+      allow read: if request.auth != null && isAdmin();
+      allow write: if request.auth != null && isAdmin();
+    }
+    
+    // Helper functions
+    function isAdmin() {
+      return request.auth.token.role == 'admin';
+    }
+    
+    function isTeacher() {
+      return request.auth.token.role == 'teacher';
+    }
+    
+    function isCounselor() {
+      return request.auth.token.role == 'counselor';
+    }
+    
+    // File size validation (max 10MB for images)
+    function isValidImageSize() {
+      return request.resource.size < 10 * 1024 * 1024;
+    }
+    
+    // File type validation for images
+    function isValidImageType() {
+      return request.resource.contentType.matches('image/.*');
+    }
+    
+    // File type validation for documents
+    function isValidDocumentType() {
+      return request.resource.contentType in ['application/pdf', 'text/csv', 'application/vnd.ms-excel', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+    }
+  }
+}
