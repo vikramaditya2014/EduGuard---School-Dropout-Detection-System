@@ -872,18 +872,18 @@ export default function HomePage() {
               <div className="space-y-2 text-slate-400">
                 <button onClick={() => scrollToSection('about')} className="block hover:text-white transition-colors">About</button>
                 <button onClick={() => scrollToSection('contact')} className="block hover:text-white transition-colors">Contact</button>
-                <a href="#" className="block hover:text-white transition-colors">Careers</a>
-                <a href="#" className="block hover:text-white transition-colors">Blog</a>
+                <a href="/careers" className="block hover:text-white transition-colors">Careers</a>
+                <a href="/blog" className="block hover:text-white transition-colors">Blog</a>
               </div>
             </div>
             
             <div>
               <h4 className="text-white font-semibold mb-4">Support</h4>
               <div className="space-y-2 text-slate-400">
-                <a href="#" className="block hover:text-white transition-colors">Help Center</a>
-                <a href="#" className="block hover:text-white transition-colors">Documentation</a>
-                <a href="#" className="block hover:text-white transition-colors">Privacy Policy</a>
-                <a href="#" className="block hover:text-white transition-colors">Terms of Service</a>
+                <Link href="/dashboard/help" className="block hover:text-white transition-colors">Help Center</Link>
+                <a href="/docs" className="block hover:text-white transition-colors">Documentation</a>
+                <Link href="/privacy" className="block hover:text-white transition-colors">Privacy Policy</Link>
+                <Link href="/terms" className="block hover:text-white transition-colors">Terms of Service</Link>
               </div>
             </div>
           </div>

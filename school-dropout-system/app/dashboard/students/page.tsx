@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSearchParams } from 'next/navigation';
 import { 
   Users, 
   Search, 
@@ -201,6 +202,7 @@ const initialStudentsData = [
 ];
 
 export default function StudentsPage() {
+  const searchParams = useSearchParams();
   const [students, setStudents] = useState(initialStudentsData);
   const [selectedStudent, setSelectedStudent] = useState<typeof initialStudentsData[0] | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -213,6 +215,14 @@ export default function StudentsPage() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingStudent, setEditingStudent] = useState<any>(null);
+
+  // Handle URL parameters
+  useEffect(() => {
+    const action = searchParams.get('action');
+    if (action === 'add') {
+      setShowAddModal(true);
+    }
+  }, [searchParams]);
 
   // Filter and sort students
   const filteredAndSortedStudents = useMemo(() => {
